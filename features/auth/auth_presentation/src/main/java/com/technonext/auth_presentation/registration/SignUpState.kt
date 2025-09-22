@@ -1,0 +1,16 @@
+package com.technonext.auth_presentation.registration
+
+data class SignUpState(
+    val isMailValid: Boolean = false,
+    val email: String = "",
+    val password: String = "",
+    val isPasswordValid: Boolean = false,
+    val confirmPassword: String = "",
+    val isConfirmPasswordValid: Boolean = false,
+    val isEmailTouched: Boolean = false,
+    val isPasswordTouched: Boolean = false,
+    val isConfirmPasswordTouched: Boolean = false,
+    val isRememberMeChecked: Boolean = false,
+    val name: String = "",
+    val isNameTouched: Boolean = false
+)

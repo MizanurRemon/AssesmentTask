@@ -21,3 +21,13 @@ dependencyResolutionManagement {
 
 rootProject.name = "AssesmentTask"
 include(":app")
+include(":features:auth:auth_data")
+include(":features:auth:auth_presentation")
+include(":features:auth:auth_domain")
+include(":core:common")
+include(":core:data")
+include(":core:database")
+include(":core:datastore")
+include(":core:designsystem")
+include(":core:domain")
+include(":core:ui")
