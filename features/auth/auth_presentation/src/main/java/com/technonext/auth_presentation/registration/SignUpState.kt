@@ -1,5 +1,7 @@
 package com.technonext.auth_presentation.registration
 
+import com.technonext.designsystem.utils.StrengthResult
+
 data class SignUpState(
     val isMailValid: Boolean = false,
     val email: String = "",
@@ -12,5 +14,6 @@ data class SignUpState(
     val isConfirmPasswordTouched: Boolean = false,
     val isRememberMeChecked: Boolean = false,
     val name: String = "",
-    val isNameTouched: Boolean = false
+    val isNameTouched: Boolean = false,
+    val strengthResult : StrengthResult = StrengthResult.EMPTY
 )

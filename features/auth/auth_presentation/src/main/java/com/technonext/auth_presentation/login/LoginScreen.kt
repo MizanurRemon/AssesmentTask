@@ -29,24 +29,27 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
-import com.technonext.designsystem.components.AppActionButton
-import com.technonext.designsystem.components.AuthTopBar
 import com.technonext.common.util.UiEvent
+import com.technonext.designsystem.components.AppActionButton
 import com.technonext.designsystem.components.CommonTextField
 import com.technonext.designsystem.components.PasswordTextField
 import com.technonext.designsystem.r
 import com.technonext.designsystem.rippleClickable
+import com.technonext.designsystem.ssp
 import com.technonext.designsystem.theme.BACKGROUND_COLOR
+import com.technonext.designsystem.theme.ColorPrimaryDark
 import com.technonext.designsystem.theme.appBrush
+import com.technonext.designsystem.theme.bodyRegularSpanStyle
 import com.technonext.designsystem.theme.bodyRegularTextStyle
+import com.technonext.designsystem.theme.bodyXSRegularTextStyle
 import com.technonext.designsystem.theme.grayScale
 import com.technonext.designsystem.theme.primaryBlue
+import com.technonext.designsystem.theme.subHeading1TextStyle
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import com.technonext.common.R as CommonR
@@ -61,7 +64,6 @@ fun LoginScreen(
     uiEvent: Flow<UiEvent>,
     onForgotPassword: () -> Unit,
     onSignUp: () -> Unit,
-    onSignIn: () -> Unit,
     onHome: () -> Unit
 ) {
     val context = LocalContext.current
@@ -90,7 +92,7 @@ fun LoginScreen(
 
 
     val annotateSignUpString = buildAnnotatedString {
-        withStyle(style = SpanStyle(color = grayScale)) {
+        withStyle(style = bodyRegularSpanStyle.copy(fontSize = 15.ssp())) {
             append(stringResource(id = CommonR.string.you_have_not_any_account) + " ")
         }
 
@@ -99,7 +101,13 @@ fun LoginScreen(
             annotation = CommonR.string.sign_up.toString()
         )
 
-        withStyle(style = SpanStyle(color = primaryBlue)) {
+        withStyle(
+            style = bodyRegularSpanStyle.copy(
+                fontWeight = FontWeight.Bold,
+                color = ColorPrimaryDark,
+                fontSize = 15.ssp()
+            )
+        ) {
             append(stringResource(id = CommonR.string.sign_up))
         }
 
@@ -114,15 +122,10 @@ fun LoginScreen(
             .padding(top = 24.r()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        AuthTopBar(
-            onLanguageClick = {
-
-            }
-        )
 
         Spacer(modifier = Modifier.height(40.r()))
 
-        Text(text = stringResource(CommonR.string.sign_in), style = bodyRegularTextStyle)
+        Text(text = stringResource(CommonR.string.sign_in), style = subHeading1TextStyle)
 
         Spacer(modifier = Modifier.height(10.r()))
 
@@ -144,8 +147,8 @@ fun LoginScreen(
             },
             annotateSignUpString = annotateSignUpString,
             onSignIn = {
-                onSignIn()
-            },
+                onEvent(LoginEvent.OnSignIn)
+            }
         )
     }
 }
@@ -201,12 +204,12 @@ fun ContentBox(
                 keyboardController = keyboardController
             )
 
-           Spacer(modifier = Modifier.height(14.r()))
+            Spacer(modifier = Modifier.height(14.r()))
 
             Row(verticalAlignment = Alignment.CenterVertically) {
 
                 Checkbox(
-                    modifier = Modifier.size(45.r()),
+                    modifier = Modifier.size(36.r()),
                     checked = state.isRememberMeChecked,
                     onCheckedChange = {
                         onEvent(LoginEvent.OnRememberMeChecked(it))
@@ -220,20 +223,14 @@ fun ContentBox(
 
                 Text(
                     text = stringResource(CommonR.string.remember_me),
-                    style = bodyRegularTextStyle.copy(
-                        textAlign = TextAlign.Start,
-                        color = grayScale
-                    )
+                    style = bodyXSRegularTextStyle
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
 
                 Text(
                     text = stringResource(CommonR.string.forgot_password),
-                    style = bodyRegularTextStyle.copy(
-                        textAlign = TextAlign.Start,
-                        color = grayScale
-                    ),
+                    style = bodyXSRegularTextStyle,
                     modifier = Modifier.rippleClickable {
                         onForgotPassword()
                     }
@@ -291,7 +288,6 @@ fun PreviewLoginScreen() {
         onEvent = {},
         onForgotPassword = {},
         onSignUp = {},
-        onSignIn = {},
         uiEvent = flow { },
         onHome = {},
         snackBarHostState = remember {

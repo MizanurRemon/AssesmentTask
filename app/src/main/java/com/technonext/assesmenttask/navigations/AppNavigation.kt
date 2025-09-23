@@ -12,6 +12,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.technonext.assesmenttask.home.HomeScreen
 import com.technonext.auth_presentation.login.LoginScreen
 import com.technonext.auth_presentation.login.LoginViewModel
 import com.technonext.auth_presentation.registration.SignUpScreen
@@ -65,9 +66,6 @@ fun AppNavigation(
                     onSignUp = {
                         navController.navigate(Route.SIGN_UP)
                     },
-                    onSignIn = {
-
-                    },
                     onHome = {
                         navController.navigate(Route.HOME) {
                             popUpTo(navController.graph.id) {}
@@ -105,12 +103,12 @@ fun AppNavigation(
                 )
             }
 
-            /*composable(route = Route.HOME) {
-                val viewModel = hiltViewModel<HomeViewModel>()
+            composable(route = Route.HOME) {
+                //val viewModel = hiltViewModel<HomeViewModel>()
                 HomeScreen(
-                    state = viewModel.state
+                    //state = viewModel.state
                 )
-            }*/
+            }
         }
     }
 

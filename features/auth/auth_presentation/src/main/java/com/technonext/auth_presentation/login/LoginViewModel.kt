@@ -4,11 +4,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.technonext.common.util.USER_MAIL
+import com.technonext.common.util.USER_PASSWORD
 import com.technonext.common.util.UiEvent
 import com.technonext.common.util.validateEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -23,6 +27,24 @@ class LoginViewModel @Inject constructor() : ViewModel() {
 
     fun onEvent(event: LoginEvent) {
         when (event) {
+            is LoginEvent.OnSignIn -> {
+                viewModelScope.launch {
+                    if (state.isMailValid && state.isPasswordValid) {
+                        if (state.email == USER_MAIL && state.password == USER_PASSWORD) {
+                            _uiEvent.emit(UiEvent.Success)
+                        } else {
+                            if (state.email != USER_MAIL) {
+                                state = state.copy(isMailValid = false)
+                            }
+
+                            if (state.password != USER_PASSWORD) {
+                                state = state.copy(isPasswordValid = false)
+                            }
+                        }
+                    }
+                }
+            }
+
             is LoginEvent.OnEmailEnter -> {
                 state = state.copy(
                     isMailValid = validateEmail(event.email),

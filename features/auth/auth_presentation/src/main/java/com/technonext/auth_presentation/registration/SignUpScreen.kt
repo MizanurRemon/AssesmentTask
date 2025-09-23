@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,6 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -26,19 +29,21 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.technonext.common.util.UiEvent
 import com.technonext.designsystem.components.AppActionButton
-import com.technonext.designsystem.components.AuthTopBar
 import com.technonext.designsystem.components.CommonTextField
 import com.technonext.designsystem.components.PasswordTextField
 import com.technonext.designsystem.r
+import com.technonext.designsystem.ssp
 import com.technonext.designsystem.theme.BACKGROUND_COLOR
+import com.technonext.designsystem.theme.ColorPrimaryDark
 import com.technonext.designsystem.theme.appBrush
+import com.technonext.designsystem.theme.bodyRegularSpanStyle
 import com.technonext.designsystem.theme.bodyRegularTextStyle
 import com.technonext.designsystem.theme.grayScale
 import com.technonext.designsystem.theme.primaryBlue
@@ -56,7 +61,7 @@ fun SignUpScreen(
     onEvent: (SignUpEvent) -> Unit,
     onSignIn: () -> Unit,
     uiEvent: Flow<UiEvent>,
-    onHome: ()-> Unit,
+    onHome: () -> Unit,
     snackBarHostState: SnackbarHostState,
 ) {
 
@@ -86,7 +91,7 @@ fun SignUpScreen(
     }
 
     val annotateSignUpString = buildAnnotatedString {
-        withStyle(style = SpanStyle(color = grayScale)) {
+        withStyle(style = bodyRegularSpanStyle.copy(fontSize = 15.ssp())) {
             append(stringResource(id = CommonR.string.already_have_an_account) + " ")
         }
 
@@ -95,7 +100,13 @@ fun SignUpScreen(
             annotation = CommonR.string.sign_in.toString()
         )
 
-        withStyle(style = SpanStyle(color = primaryBlue)) {
+        withStyle(
+            style = bodyRegularSpanStyle.copy(
+                fontWeight = FontWeight.Bold,
+                color = ColorPrimaryDark,
+                fontSize = 15.ssp()
+            )
+        ) {
             append(stringResource(id = CommonR.string.sign_in))
         }
 
@@ -111,12 +122,6 @@ fun SignUpScreen(
             .padding(top = 24.r()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        AuthTopBar(
-            onLanguageClick = {
-
-            }
-        )
-
 
         Spacer(modifier = Modifier.height(40.r()))
 
@@ -190,7 +195,7 @@ private fun ContentBox(
                 isValid = true,
                 onTouched = { onEvent(SignUpEvent.OnNameInputTouchedListener) },
                 placeholder = stringResource(id = CommonR.string.your_name),
-                leadingIcon = painterResource(id = DesignSystemR.drawable.ic_smile),
+                leadingIcon = painterResource(id = DesignSystemR.drawable.ic_account),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
             )
 
@@ -204,6 +209,31 @@ private fun ContentBox(
                 onTouched = { onEvent(SignUpEvent.OnPasswordTouchedListener) },
                 keyboardController = keyboardController
             )
+
+            if (state.isPasswordTouched && state.password.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(8.r()))
+
+                LinearProgressIndicator(
+                    progress = { (state.strengthResult.score / 4f).coerceIn(0f, 1f) },
+                    trackColor = MaterialTheme.colorScheme.surfaceVariant,
+                    color = state.strengthResult.strength.color,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(8.r())
+                )
+
+                Spacer(modifier = Modifier.height(8.r()))
+
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Spacer(modifier = Modifier.weight(1f))
+                    Text(
+                        text = state.strengthResult.strength.label,
+                        color = state.strengthResult.strength.color,
+                        style = MaterialTheme.typography.labelLarge
+                    )
+                }
+            }
+
 
             Spacer(modifier = Modifier.height(14.r()))
 
@@ -229,7 +259,9 @@ private fun ContentBox(
 
                 },
                 textStyle = bodyRegularTextStyle.copy(color = Color.White),
-                modifier = Modifier.height(40.r()).fillMaxWidth()
+                modifier = Modifier
+                    .height(40.r())
+                    .fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.height(20.r()))
@@ -264,7 +296,7 @@ fun PreviewSignUpScreen() {
         state = SignUpState(),
         onEvent = {},
         onSignIn = {},
-        uiEvent = flow {  },
+        uiEvent = flow { },
         onHome = {},
         snackBarHostState = remember {
             SnackbarHostState()

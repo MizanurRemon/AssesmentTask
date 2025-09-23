@@ -1,12 +1,12 @@
 package com.technonext.auth_presentation.registration
 
-import android.content.Intent
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.technonext.common.util.UiEvent
 import com.technonext.common.util.validateEmail
+import com.technonext.designsystem.utils.calculatePasswordStrength
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -14,11 +14,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class SignUpViewModel @Inject constructor(
-) : ViewModel() {
-
-    private val _launchSignInIntent = MutableSharedFlow<Intent>(extraBufferCapacity = 1)
-    val launchSignInIntent = _launchSignInIntent.asSharedFlow()
+class SignUpViewModel @Inject constructor() : ViewModel() {
 
     var state by mutableStateOf(SignUpState())
         private set
@@ -41,9 +37,12 @@ class SignUpViewModel @Inject constructor(
             }
 
             is SignUpEvent.OnPasswordEnter -> {
+                val result = calculatePasswordStrength(event.password)
+
                 state = state.copy(
+                    strengthResult = result,
                     password = event.password,
-                    isPasswordValid = event.password.length >= 6
+                    isPasswordValid =  result.score > 1
                 )
             }
 
