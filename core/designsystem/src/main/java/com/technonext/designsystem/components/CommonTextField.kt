@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusEvent
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.Painter
@@ -55,48 +58,47 @@ fun CommonTextField(
     onTouched: () -> Unit,
     leadingIcon: Painter? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    textStyle: TextStyle = bodyRegularTextStyle.copy(
-        color = Color.Black,
-        textAlign = TextAlign.Start
-    ),
-    cursorColor: Color = primaryBlue,
+    textStyle: TextStyle = bodyRegularTextStyle,
+    cursorColor: Color? = null,
     shape: RoundedCornerShape = RoundedCornerShape(16.r())
 ) {
+    val scheme = MaterialTheme.colorScheme
+
+    val effectiveTextStyle = textStyle.copy(
+        color = scheme.onSurface,
+        textAlign = TextAlign.Start
+    )
+    val effectiveCursor = cursorColor ?: scheme.primary
+
+    val isError = isTouched && !isValid
+    val borderColor = when {
+        isError -> scheme.error
+        isTouched -> scheme.primary
+        else -> scheme.outline.copy(alpha = 0.35f)
+    }
+
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
             .clip(shape)
-            .border(
-                width = 1.r(),
-                shape = shape,
-                color = if (isTouched) {
-                    if (isValid) primaryBlue else ColorError
-                } else {
-                    grayScale.copy(alpha = 0.2f)
-                }
-            )
-            .background(Color.White, shape)
+            .border(width = 1.r(), shape = shape, color = borderColor)
+            .background(color = scheme.surfaceColorAtElevation(1.r()), shape)
             .padding(horizontal = 10.r())
-            .onFocusEvent { event ->
-                if (event.isFocused) onTouched()
-            }
+            .onFocusEvent { event -> if (event.isFocused) onTouched() }
             .pointerInteropFilter {
-                if (it.action == MotionEvent.ACTION_DOWN) {
-                    onTouched()
-                }
+                if (it.action == MotionEvent.ACTION_DOWN) onTouched()
                 false
             }
     ) {
-
         leadingIcon?.let {
             Image(
                 painter = it,
                 contentDescription = null,
-                modifier = Modifier.size(16.r())
+                modifier = Modifier.size(16.r()),
             )
         }
-
 
         Spacer(modifier = Modifier.width(8.r()))
 
@@ -105,9 +107,9 @@ fun CommonTextField(
             value = value,
             onValueChange = onValueChange,
             singleLine = true,
-            textStyle = textStyle,
+            textStyle = effectiveTextStyle,
             keyboardOptions = keyboardOptions,
-            cursorBrush = SolidColor(cursorColor),
+            cursorBrush = SolidColor(effectiveCursor),
             modifier = Modifier
                 .weight(1f)
                 .padding(vertical = 15.r()),
@@ -115,7 +117,10 @@ fun CommonTextField(
                 if (value.isEmpty()) {
                     Text(
                         text = placeholder,
-                        style = textStyle.copy(color = grayScale.copy(alpha = 0.6f))
+                        style = effectiveTextStyle.copy(
+                            color = scheme.onSurfaceVariant.copy(alpha = 0.7f),
+                            textAlign = TextAlign.Start
+                        )
                     )
                 }
                 innerTextField()

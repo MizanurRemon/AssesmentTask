@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -37,7 +38,7 @@ import com.technonext.common.R as CommonR
 fun AppActionButton(
     @DrawableRes icon: Int? = null,
     @StringRes text: Int,
-    bgColor: Color = primaryBlue,
+    bgColor: Color = MaterialTheme.colorScheme.primary,
     onClick: () -> Unit,
     textStyle: TextStyle = bodyBoldTextStyle,
     radius: Int = 16,
@@ -50,7 +51,8 @@ fun AppActionButton(
         },
         shape = RoundedCornerShape(radius),
         colors = ButtonDefaults.buttonColors(
-            containerColor = bgColor
+            containerColor = bgColor,
+            contentColor = MaterialTheme.colorScheme.onPrimary
         ),
         modifier = modifier
     ) {
@@ -69,7 +71,10 @@ fun AppActionButton(
             }
             Text(
                 text = stringResource(text),
-                style = textStyle.copy(fontWeight = FontWeight.Bold)
+                style = textStyle.copy(
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
             )
         }
     }
@@ -78,9 +83,11 @@ fun AppActionButton(
 @Composable
 @Preview
 fun PreviewAppActionButton() {
-    Column(modifier = Modifier
-        .height(200.r())
-        .background(color = BACKGROUND_COLOR)) {
+    Column(
+        modifier = Modifier
+            .height(200.r())
+            .background(color = BACKGROUND_COLOR)
+    ) {
         Column(modifier = Modifier.padding(20.r())) {
 
             AppActionButton(

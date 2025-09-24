@@ -15,9 +15,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -41,9 +43,6 @@ import com.technonext.designsystem.components.PasswordTextField
 import com.technonext.designsystem.r
 import com.technonext.designsystem.rippleClickable
 import com.technonext.designsystem.ssp
-import com.technonext.designsystem.theme.BACKGROUND_COLOR
-import com.technonext.designsystem.theme.ColorPrimaryDark
-import com.technonext.designsystem.theme.appBrush
 import com.technonext.designsystem.theme.bodyRegularSpanStyle
 import com.technonext.designsystem.theme.bodyRegularTextStyle
 import com.technonext.designsystem.theme.bodyXSRegularTextStyle
@@ -104,7 +103,7 @@ fun LoginScreen(
         withStyle(
             style = bodyRegularSpanStyle.copy(
                 fontWeight = FontWeight.Bold,
-                color = ColorPrimaryDark,
+                color = MaterialTheme.colorScheme.primary,
                 fontSize = 15.ssp()
             )
         ) {
@@ -117,13 +116,13 @@ fun LoginScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(BACKGROUND_COLOR)
+            .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 24.r())
             .padding(top = 24.r()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Spacer(modifier = Modifier.height(40.r()))
+        Spacer(modifier = Modifier.height(120.r()))
 
         Text(text = stringResource(CommonR.string.sign_in), style = subHeading1TextStyle)
 
@@ -131,7 +130,7 @@ fun LoginScreen(
 
         Text(
             stringResource(CommonR.string.welcome_back_you_have_been_missed),
-            style = bodyRegularTextStyle.copy(color = grayScale)
+            style = bodyRegularTextStyle.copy(color = MaterialTheme.colorScheme.onSurfaceVariant)
         )
 
         Spacer(modifier = Modifier.height(30.r()))
@@ -167,10 +166,10 @@ fun ContentBox(
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .background(
-                brush = appBrush,
-                shape = RoundedCornerShape(topEnd = 12.r(), topStart = 12.r())
+                color = MaterialTheme.colorScheme.surfaceColorAtElevation(1.r()),//appBrush(),
+                shape = RoundedCornerShape(12.r())
             ),
 
         ) {
@@ -243,11 +242,9 @@ fun ContentBox(
 
             AppActionButton(
                 text = CommonR.string.sign_in,
-                bgColor = primaryBlue,
                 onClick = {
                     onSignIn()
                 },
-                textStyle = bodyRegularTextStyle.copy(color = Color.White),
                 modifier = Modifier
                     .height(40.r())
                     .fillMaxWidth()

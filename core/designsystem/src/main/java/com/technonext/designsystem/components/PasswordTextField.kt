@@ -1,6 +1,5 @@
 package com.technonext.designsystem.components
 
-
 import android.view.MotionEvent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -16,8 +15,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,7 +27,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusEvent
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -41,15 +40,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.technonext.designsystem.r
-import com.technonext.designsystem.theme.ColorError
 import com.technonext.designsystem.theme.bodyRegularTextStyle
-import com.technonext.designsystem.theme.grayScale
-import com.technonext.designsystem.theme.primaryBlue
-
-import kotlin.text.isEmpty
-import kotlin.text.isNotEmpty
-import com.technonext.designsystem.R as DesignSystemR
 import com.technonext.common.R as CommonR
+import com.technonext.designsystem.R as DesignSystemR
 
 @Composable
 fun PasswordTextField(
@@ -62,7 +55,17 @@ fun PasswordTextField(
     placeholder: String = stringResource(id = CommonR.string.password),
     keyboardController: SoftwareKeyboardController? = null
 ) {
+    val scheme = MaterialTheme.colorScheme
     var showPassword by remember { mutableStateOf(false) }
+
+    val isError = isTouched && !isValid
+    val borderColor = when {
+        isError -> scheme.error
+        isTouched -> scheme.primary
+        else -> scheme.outline.copy(alpha = 0.35f)
+    }
+
+
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -72,28 +75,21 @@ fun PasswordTextField(
             .border(
                 width = 1.r(),
                 shape = RoundedCornerShape(16.r()),
-                color = if (isTouched) {
-                    if (isValid) primaryBlue else ColorError
-                } else {
-                    grayScale.copy(alpha = 0.2f)
-                }
+                color = borderColor
             )
-            .background(Color.White, RoundedCornerShape(6.r()))
+            .background(scheme.surfaceColorAtElevation(1.r()), RoundedCornerShape(16.r()))
             .padding(horizontal = 10.r())
-            .onFocusEvent { event ->
-                if (event.isFocused) onTouched()
-            }
+            .onFocusEvent { event -> if (event.isFocused) onTouched() }
             .pointerInteropFilter {
-                if (it.action == MotionEvent.ACTION_DOWN) {
-                    onTouched()
-                }
+                if (it.action == MotionEvent.ACTION_DOWN) onTouched()
                 false
             }
     ) {
         Image(
             painter = painterResource(id = DesignSystemR.drawable.ic_lock),
             contentDescription = null,
-            modifier = Modifier.size(16.r())
+            modifier = Modifier.size(16.r()),
+            //colorFilter = ColorFilter.tint(scheme.onSurfaceVariant)
         )
 
         Spacer(modifier = Modifier.width(8.r()))
@@ -103,7 +99,7 @@ fun PasswordTextField(
             onValueChange = onValueChange,
             singleLine = true,
             textStyle = bodyRegularTextStyle.copy(
-                color = Color.Black,
+                color = scheme.onSurface,
                 textAlign = TextAlign.Start
             ),
             keyboardOptions = KeyboardOptions(
@@ -114,7 +110,7 @@ fun PasswordTextField(
                 keyboardController?.hide()
                 defaultKeyboardAction(ImeAction.Done)
             }),
-            cursorBrush = SolidColor(primaryBlue),
+            cursorBrush = SolidColor(scheme.primary),
             visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
             modifier = Modifier
                 .weight(1f)
@@ -124,7 +120,7 @@ fun PasswordTextField(
                     Text(
                         text = placeholder,
                         style = bodyRegularTextStyle.copy(
-                            color = grayScale.copy(alpha = 0.6f),
+                            color = scheme.onSurfaceVariant.copy(alpha = 0.7f),
                             textAlign = TextAlign.Start
                         )
                     )
@@ -133,7 +129,7 @@ fun PasswordTextField(
             }
         )
 
-        Icon(
+        Image(
             painter = painterResource(
                 id = if (showPassword) {
                     DesignSystemR.drawable.ic_eye_close
@@ -142,7 +138,7 @@ fun PasswordTextField(
                 }
             ),
             contentDescription = null,
-            tint = grayScale,
+            //tint = scheme.onSurfaceVariant,
             modifier = Modifier
                 .clickable { showPassword = !showPassword }
                 .size(16.r())
@@ -150,7 +146,12 @@ fun PasswordTextField(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(name = "Password – Light", showBackground = true)
+@Preview(
+    name = "Password – Dark",
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES,
+    showBackground = true
+)
 @Composable
 fun PreviewPasswordTextField() {
     var password by remember { mutableStateOf("") }
@@ -161,8 +162,7 @@ fun PreviewPasswordTextField() {
         onValueChange = { password = it },
         isTouched = password.isNotEmpty(),
         isValid = password.length >= 6,
-        onTouched = { /* Preview: no-op */ },
+        onTouched = { /* no-op */ },
         keyboardController = keyboardController
     )
 }
-

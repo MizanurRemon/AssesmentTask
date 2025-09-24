@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="Theme.AssessmentTask" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Make status & navigation bars transparent so Compose can draw edge-to-edge -->
         <item name="android:statusBarColor">@android:color/transparent</item>

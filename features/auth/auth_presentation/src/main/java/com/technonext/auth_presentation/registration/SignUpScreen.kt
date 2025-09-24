@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -103,7 +104,7 @@ fun SignUpScreen(
         withStyle(
             style = bodyRegularSpanStyle.copy(
                 fontWeight = FontWeight.Bold,
-                color = ColorPrimaryDark,
+                color = MaterialTheme.colorScheme.primary,
                 fontSize = 15.ssp()
             )
         ) {
@@ -117,13 +118,13 @@ fun SignUpScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(BACKGROUND_COLOR)
+            .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 24.r())
             .padding(top = 24.r()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Spacer(modifier = Modifier.height(40.r()))
+        Spacer(modifier = Modifier.height(120.r()))
 
         Text(text = stringResource(CommonR.string.getting_started), style = subHeading1TextStyle)
 
@@ -162,8 +163,8 @@ private fun ContentBox(
             .fillMaxWidth()
             .wrapContentHeight()
             .background(
-                brush = appBrush,
-                shape = RoundedCornerShape(topEnd = 12.r(), topStart = 12.r())
+                color = MaterialTheme.colorScheme.surfaceColorAtElevation(1.r()),
+                shape = RoundedCornerShape(12.r())
             ),
 
         ) {
@@ -254,11 +255,10 @@ private fun ContentBox(
 
             AppActionButton(
                 text = CommonR.string.sign_up,
-                bgColor = primaryBlue,
                 onClick = {
 
                 },
-                textStyle = bodyRegularTextStyle.copy(color = Color.White),
+                textStyle = bodyRegularTextStyle,
                 modifier = Modifier
                     .height(40.r())
                     .fillMaxWidth()

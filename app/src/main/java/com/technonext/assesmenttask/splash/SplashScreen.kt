@@ -1,11 +1,11 @@
 package com.technonext.assesmenttask.splash
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -13,10 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.technonext.common.util.UiEvent
-import com.technonext.designsystem.theme.BACKGROUND_COLOR
-import com.technonext.designsystem.theme.bodyMediumTextStyle
+import com.technonext.designsystem.theme.heading1TextStyle
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import com.technonext.common.R as CommonR
@@ -33,7 +31,7 @@ fun SplashScreen(
 
             when (event) {
                 is UiEvent.Success -> {
-                    onLogin()
+                    onHome()
                 }
 
                 is UiEvent.ShowSnackbar -> {
@@ -50,7 +48,7 @@ fun SplashScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = BACKGROUND_COLOR),
+            .background(MaterialTheme.colorScheme.background),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -63,17 +61,26 @@ fun SplashScreen(
             modifier = Modifier.size(100.dp)
         )*/
 
-        Spacer(modifier = Modifier.height(10.dp))
+        //Spacer(modifier = Modifier.height(10.dp))
         Text(
             text = stringResource(CommonR.string.app_name),
-            style = bodyMediumTextStyle
+            style = heading1TextStyle
         )
 
 
     }
 }
 
-@Preview
+@Preview(
+    name = "Light Mode",
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    showBackground = true
+)
+@Preview(
+    name = "Dark Mode",
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    showBackground = true
+)
 @Composable
 fun PreviewSplashScreen() {
     SplashScreen(

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,6 +28,7 @@ import com.technonext.designsystem.theme.BACKGROUND_COLOR
 import com.technonext.designsystem.theme.appBrush
 import com.technonext.designsystem.theme.bodyMediumTextStyle
 import com.technonext.designsystem.theme.bodyRegularTextStyle
+import com.technonext.designsystem.theme.bodyXSBoldTextStyle
 import com.technonext.designsystem.theme.grayScale
 import com.technonext.designsystem.theme.primaryBlue
 import com.technonext.designsystem.theme.subHeading1TextStyle
@@ -37,23 +39,19 @@ import com.technonext.designsystem.R as DesignSystemR
 fun ForgotPasswordScreen(
     state: ForgotPasswordState,
     onEvent: (ForgotPasswordEvent) -> Unit,
-    onBack:()-> Unit
+    onBack: () -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(BACKGROUND_COLOR)
+            .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 24.r())
             .padding(top = 24.r()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        AuthTopBar(
-            onLanguageClick = {
 
-            }
-        )
 
-        Spacer(modifier = Modifier.height(40.r()))
+        Spacer(modifier = Modifier.height(120.r()))
 
         Text(text = stringResource(CommonR.string.forgot_password), style = subHeading1TextStyle)
 
@@ -73,8 +71,8 @@ fun ForgotPasswordScreen(
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .background(
-                    brush = appBrush,
-                    shape = RoundedCornerShape(topEnd = 12.r(), topStart = 12.r())
+                    brush = appBrush(),
+                    shape = RoundedCornerShape(12.r())
                 )
         ) {
 
@@ -98,17 +96,14 @@ fun ForgotPasswordScreen(
                     onClick = {
 
                     },
-                    text = CommonR.string.send,
-                    bgColor = primaryBlue,
+                    text = CommonR.string.send
                 )
 
                 Spacer(modifier = Modifier.height(14.r()))
 
                 Text(
                     text = stringResource(CommonR.string.back_to_sign_in),
-                    style = bodyRegularTextStyle.copy(
-                        color = primaryBlue
-                    ),
+                    style = bodyXSBoldTextStyle,
                     modifier = Modifier.rippleClickable {
                         onBack()
                     }

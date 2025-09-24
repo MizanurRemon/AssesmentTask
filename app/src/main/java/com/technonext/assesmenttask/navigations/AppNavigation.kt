@@ -1,6 +1,9 @@
 package com.technonext.assesmenttask.navigations
 
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -29,12 +32,15 @@ fun AppNavigation(
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
     Scaffold(
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         snackbarHost = { SnackbarHost(snackBarHostState) }
     ) { innerPadding ->
         NavHost(
             navController = navController,
             startDestination = Route.SPLASH,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier
+                .padding(innerPadding)
+                .windowInsetsPadding(WindowInsets.safeDrawing)
         ) {
             composable(Route.SPLASH) {
                 val viewModel = hiltViewModel<SplashViewModel>()
