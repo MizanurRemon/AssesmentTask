@@ -17,4 +17,7 @@
     <string name="getting_started">Getting Started</string>
     <string name="create_an_account_to_continue_and_connect_with_the_people">Create an account to continue and connect with the people.</string>
     <string name="your_name">Your Name</string>
+    <string name="feed">Feed</string>
+    <string name="favorites">Favorites</string>
+    <string name="settings">Settings</string>
 </resources>

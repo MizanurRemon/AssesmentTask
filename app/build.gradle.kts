@@ -66,6 +66,7 @@ dependencies {
     implementation(project(Modules.DESIGN_SYSTEM))
     implementation(project(Modules.COMMON))
     implementation(project(Modules.DATABASE))
+    implementation(project(Modules.NETWORK))
 
     implementation(project(Modules.AUTH_PRESENTATION))
     implementation(project(Modules.AUTH_DOMAIN))
@@ -73,7 +74,7 @@ dependencies {
 
     //implementation(project(Modules.FEED_PRESENTATION))
     /*
-    implementation(project(Modules.NETWORK))
+
     implementation(project(Modules.DATASTORE))
 
     implementation(project(Modules.DOMAIN))
