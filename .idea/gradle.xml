@@ -37,6 +37,10 @@
             <option value="$PROJECT_DIR$/features/auth/auth_data" />
             <option value="$PROJECT_DIR$/features/auth/auth_domain" />
             <option value="$PROJECT_DIR$/features/auth/auth_presentation" />
+            <option value="$PROJECT_DIR$/features/feed" />
+            <option value="$PROJECT_DIR$/features/feed/feed_data" />
+            <option value="$PROJECT_DIR$/features/feed/feed_domain" />
+            <option value="$PROJECT_DIR$/features/feed/feed_presentation" />
           </set>
         </option>
       </GradleProjectSettings>

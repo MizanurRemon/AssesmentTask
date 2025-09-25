@@ -7,7 +7,7 @@ import android.net.NetworkCapabilities
 import androidx.annotation.RequiresPermission
 import dagger.hilt.android.qualifiers.ApplicationContext
 
-class NetworkHandler( @ApplicationContext private val context: Context) {
+class NetworkHandler(@ApplicationContext private val context: Context) {
     @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
     fun isNetworkAvailable(): Boolean {
         val connectivityManager =

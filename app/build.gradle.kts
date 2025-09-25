@@ -71,8 +71,8 @@ dependencies {
     implementation(project(Modules.AUTH_PRESENTATION))
     implementation(project(Modules.AUTH_DOMAIN))
     implementation(project(Modules.AUTH_DATA))
-
-    //implementation(project(Modules.FEED_PRESENTATION))
+    implementation(project(Modules.FEED_DATA))
+    implementation(project(Modules.FEED_PRESENTATION))
     /*
 
     implementation(project(Modules.DATASTORE))

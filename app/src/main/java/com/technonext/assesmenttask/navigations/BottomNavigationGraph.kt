@@ -7,7 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.technonext.assesmenttask.home.bottom_nav_screens.SettingsScreen
 import com.technonext.assesmenttask.home.bottom_nav_screens.FavoritesScreen
-import com.technonext.assesmenttask.home.bottom_nav_screens.FeedScreen
+import com.technonext.feed_presentation.FeedScreen
 import com.technonext.designsystem.BottomNavRoute
 
 @Composable
@@ -19,6 +19,7 @@ fun BottomNavigationGraph(navController: NavHostController = rememberNavControll
     ) {
 
         composable (BottomNavRoute.FEED) {
+            //val viewModel = hiltViewModel<FeedViewModel>()
             FeedScreen()
         }
 

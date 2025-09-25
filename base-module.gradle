@@ -47,7 +47,7 @@ dependencies {
     testImplementation(libs.compose.ui.test)
     testImplementation(libs.mockk)
     testImplementation(libs.mockwebserver)
-
+    implementation(libs.retrofit)
     // Android test dependencies
     androidTestImplementation(libs.junit)
     testImplementation(libs.androidx.junit)
