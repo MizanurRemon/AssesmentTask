@@ -95,4 +95,4 @@ Open the project in **Android Studio**, let Gradle sync.
 Use this Google Drive folder to store  screen recordings:
 
 * [Drive – AssesmentTask Assets](https://drive.google.com/drive/folders/15HeCjSKA0tuomObytgK9M8DVFkAFZBHx?usp=sharing)
-
+Also includes a demo video.
