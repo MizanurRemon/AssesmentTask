@@ -9,4 +9,6 @@ interface FeedRepository {
     suspend fun getProducts(limit: Int, skip: Int): ResultWrapper<List<ProductModel>, CommonErrorModel>
     suspend fun deleteProducts()
     fun getLocalProducts(): Flow<List<ProductModel>>
+    fun getFavoriteProducts(): Flow<List<ProductModel>>
+    suspend fun updateFavorite(productId: Int, isFavorite: Boolean)
 }

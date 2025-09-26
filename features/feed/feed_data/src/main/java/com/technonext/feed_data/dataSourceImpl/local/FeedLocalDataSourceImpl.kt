@@ -19,6 +19,9 @@ class FeedLocalDataSourceImpl(
     override fun getProducts(): Flow<List<ProductEntity>> =
         productsDao.getProducts()
 
+    override fun getFavoriteProducts(): Flow<List<ProductEntity>> =
+        productsDao.getFavoriteProducts()
+
     override suspend fun deleteUsers() = withContext(coroutineDispatcherProvider.io) {
         productsDao.deleteUsers()
     }

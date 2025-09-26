@@ -1,4 +1,4 @@
-package com.technonext.feed_presentation
+package com.technonext.feed_presentation.feed
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.technonext.feed_domain.use_case.DeleteProductsUseCase
 import com.technonext.feed_domain.use_case.GetProductsUseCase
 import com.technonext.feed_domain.use_case.ObserveLocalDataUseCase
+import com.technonext.feed_domain.use_case.UpdateFavoriteUseCase
 import com.technonext.network.utils.ResultWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -19,21 +20,33 @@ import javax.inject.Inject
 class FeedViewModel @Inject constructor(
     private val getProductsUseCase: GetProductsUseCase,
     private val deleteProductsUseCase: DeleteProductsUseCase,
-    private val getLocalDataUseCase: ObserveLocalDataUseCase
+    private val getLocalDataUseCase: ObserveLocalDataUseCase,
+    private val updateFavoriteUseCase: UpdateFavoriteUseCase
 ) : ViewModel() {
 
     companion object {
         private const val PAGE_SIZE = 10
     }
 
-
     var state by mutableStateOf(FeedState())
         private set
 
     init {
-
         deleteProducts()
         loadLocalData()
+    }
+
+    fun onEvent(event: FeedEvent) {
+        when (event) {
+            is FeedEvent.OnFavoriteClickEvent -> {
+                viewModelScope.launch {
+                    updateFavoriteUseCase(
+                        productId = event.productId,
+                        isFavorite = event.isFavorite
+                    )
+                }
+            }
+        }
     }
 
     private fun loadLocalData() {

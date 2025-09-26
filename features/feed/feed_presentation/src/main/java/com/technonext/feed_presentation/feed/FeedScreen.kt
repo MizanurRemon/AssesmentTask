@@ -1,6 +1,8 @@
-package com.technonext.feed_presentation
+package com.technonext.feed_presentation.feed
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -19,9 +22,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.technonext.designsystem.r
 import com.technonext.designsystem.theme.bodyBoldTextStyle
 import com.technonext.designsystem.theme.smallBodyTextStyle
@@ -30,14 +35,15 @@ import com.technonext.designsystem.utils.ErrorRow
 import com.technonext.designsystem.utils.LoadingRow
 import com.technonext.designsystem.utils.OnBottomReached
 import com.technonext.feed_domain.model.ProductModel
+import com.technonext.designsystem.R as DesignSystemR
 
 @Composable
-fun FeedScreen(viewModel: FeedViewModel = hiltViewModel()) {
+fun FeedScreen(state: FeedState, onEvent: (FeedEvent) -> Unit, loadNextPage: () -> Unit) {
     val listState = rememberLazyListState()
 
     // fire when near bottom
     listState.OnBottomReached(buffer = 3) {
-        viewModel.loadNextPage()
+        loadNextPage()
     }
     Column(
         modifier = Modifier
@@ -48,14 +54,24 @@ fun FeedScreen(viewModel: FeedViewModel = hiltViewModel()) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         LazyColumn(state = listState, verticalArrangement = Arrangement.spacedBy(10.r())) {
-            itemsIndexed(viewModel.state.productsList) { _, item ->
-                ProductRow(item)
+            itemsIndexed(state.productsList) { _, item ->
+                ProductRow(
+                    item = item,
+                    onClick = {
+                        onEvent(
+                            FeedEvent.OnFavoriteClickEvent(
+                                productId = item.id,
+                                isFavorite = !item.isFavorite
+                            )
+                        )
+                    }
+                )
             }
 
             item {
                 when {
-                    viewModel.state.isLoading -> LoadingRow()
-                    else -> ErrorRow(viewModel.state.error) { viewModel.loadNextPage() }
+                    state.isLoading -> LoadingRow()
+                    else -> ErrorRow(state.error) { loadNextPage() }
                 }
             }
         }
@@ -64,20 +80,23 @@ fun FeedScreen(viewModel: FeedViewModel = hiltViewModel()) {
 
 
 @Composable
-fun ProductRow(item: ProductModel) {
+fun ProductRow(item: ProductModel, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .shadow(elevation = 1.r(), spotColor = MaterialTheme.colorScheme.surfaceDim)
     ) {
-        Box(modifier = Modifier.fillMaxWidth()){
+        Box(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.fillMaxWidth()) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(vertical = 10.r(), horizontal = 5.r())
                 ) {
-                    Text(text = item.title, style = bodyBoldTextStyle.copy(textAlign = TextAlign.Start))
+                    Text(
+                        text = item.title,
+                        style = bodyBoldTextStyle.copy(textAlign = TextAlign.Start)
+                    )
 
                     Spacer(modifier = Modifier.height(10.r()))
 
@@ -98,7 +117,22 @@ fun ProductRow(item: ProductModel) {
                 }
             }
 
-
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(15.r())
+            ) {
+                Image(
+                    painter = painterResource(DesignSystemR.drawable.ic_heart),
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(color = if (item.isFavorite) Color.Red else Color.LightGray),
+                    modifier = Modifier
+                        .size(24.r())
+                        .clickable {
+                            onClick()
+                        }
+                )
+            }
 
         }
     }
@@ -108,5 +142,9 @@ fun ProductRow(item: ProductModel) {
 @Composable
 @Preview
 fun PreviewFeedScreen() {
-    FeedScreen()
+    FeedScreen(
+        state = FeedState(),
+        onEvent = {},
+        loadNextPage = {}
+    )
 }

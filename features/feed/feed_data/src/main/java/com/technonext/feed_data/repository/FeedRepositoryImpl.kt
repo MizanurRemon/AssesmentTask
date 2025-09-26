@@ -20,7 +20,10 @@ class FeedRepositoryImpl(
     private val feedRemoteDataSource: FeedRemoteDataSource,
     private val networkHandler: NetworkHandler
 ) : FeedRepository {
-    override suspend fun getProducts(limit: Int, skip: Int): ResultWrapper<List<ProductModel>, CommonErrorModel> {
+    override suspend fun getProducts(
+        limit: Int,
+        skip: Int
+    ): ResultWrapper<List<ProductModel>, CommonErrorModel> {
         return if (networkHandler.isNetworkAvailable()) {
             try {
 
@@ -50,7 +53,7 @@ class FeedRepositoryImpl(
     }
 
     override suspend fun deleteProducts() {
-        if (networkHandler.isNetworkAvailable()){
+        if (networkHandler.isNetworkAvailable()) {
             feedLocalDataSource.deleteUsers()
             feedLocalDataSource.resetPrimaryKey()
         }
@@ -60,6 +63,16 @@ class FeedRepositoryImpl(
         return feedLocalDataSource
             .getProducts()
             .map { list -> list.map { it.toResponse() } }
+    }
+
+    override fun getFavoriteProducts(): Flow<List<ProductModel>> {
+        return feedLocalDataSource
+            .getFavoriteProducts()
+            .map { list -> list.map { it.toResponse() } }
+    }
+
+    override suspend fun updateFavorite(productId: Int, isFavorite: Boolean) {
+        feedLocalDataSource.updateIsFavorite(id = productId, isFavorite = isFavorite)
     }
 
 

@@ -11,7 +11,6 @@ fun Products.toResponse(): ProductModel {
         title = title ?: "",
         description = description ?: "",
         image = if (images.isNotEmpty()) images[0] else ""
-
     )
 }
 
@@ -29,7 +28,7 @@ fun ProductEntity.toResponse(): ProductModel{
         id = id,
         title = title ?: "",
         description = description ?: "",
-        image = photoUrl ?: ""
-
+        image = photoUrl ?: "",
+        isFavorite = isFavorite
     )
 }

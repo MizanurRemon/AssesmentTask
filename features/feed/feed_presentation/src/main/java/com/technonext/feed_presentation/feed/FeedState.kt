@@ -1,4 +1,4 @@
-package com.technonext.feed_presentation
+package com.technonext.feed_presentation.feed
 
 import com.technonext.feed_domain.model.ProductModel
 
