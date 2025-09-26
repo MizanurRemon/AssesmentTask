@@ -71,6 +71,11 @@ class FeedRepositoryImpl(
             .map { list -> list.map { it.toResponse() } }
     }
 
+    override fun getFavoriteProductsCount(): Flow<Int> {
+        return feedLocalDataSource
+            .getFavoriteProductsCount()
+    }
+
     override suspend fun updateFavorite(productId: Int, isFavorite: Boolean) {
         feedLocalDataSource.updateIsFavorite(id = productId, isFavorite = isFavorite)
     }

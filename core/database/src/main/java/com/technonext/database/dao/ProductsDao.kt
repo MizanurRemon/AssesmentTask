@@ -15,8 +15,8 @@ interface ProductsDao {
     @Query("DELETE  FROM product")
     suspend fun deleteUsers()
 
-   // @Query("DELETE FROM sqlite_sequence WHERE name='product'")
-   @Query("DELETE FROM sqlite_sequence")
+    // @Query("DELETE FROM sqlite_sequence WHERE name='product'")
+    @Query("DELETE FROM sqlite_sequence")
     suspend fun resetPrimaryKey()
 
 
@@ -27,5 +27,8 @@ interface ProductsDao {
     fun getFavoriteProducts(): Flow<List<ProductEntity>>
 
     @Query("UPDATE product SET isFavorite = :isFavorite WHERE productID =:id")
-    fun updateIsFavorite(id: Int,isFavorite: Boolean)
+    fun updateIsFavorite(id: Int, isFavorite: Boolean)
+
+    @Query("SELECT count(*) from product where isFavorite = 1")
+    fun getFavoriteCount(): Flow<Int>
 }

@@ -24,9 +24,12 @@ import com.technonext.designsystem.BOTTOM_NAVIGATION_ITEM
 import com.technonext.designsystem.components.CustomNavigationItem
 import com.technonext.designsystem.components.TopAppBar
 import com.technonext.designsystem.r
+import com.technonext.common.R as CommonR
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    state: HomeState
+) {
     val bottomNavController = rememberNavController()
     Scaffold(
         topBar = {
@@ -59,7 +62,9 @@ fun HomeScreen() {
                             },
                             title = item.title,
                             icon = item.icon,
-                            isSelected = currentDestination?.route == item.route
+                            isSelected = currentDestination?.route == item.route,
+                            isFavorite = item.title == CommonR.string.favorites && state.favoriteCount > 0,
+                            favoriteCount = state.favoriteCount
                         )
 
                     }
@@ -94,5 +99,7 @@ fun HomeScreen() {
 )
 @Composable
 fun PreviewHomeScreen() {
-    HomeScreen()
+    HomeScreen(
+        state = HomeState()
+    )
 }

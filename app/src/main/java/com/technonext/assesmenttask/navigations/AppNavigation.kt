@@ -16,6 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.technonext.assesmenttask.home.HomeScreen
+import com.technonext.assesmenttask.home.HomeViewModel
 import com.technonext.auth_presentation.login.LoginScreen
 import com.technonext.auth_presentation.login.LoginViewModel
 import com.technonext.auth_presentation.registration.SignUpScreen
@@ -110,9 +111,9 @@ fun AppNavigation(
             }
 
             composable(route = Route.HOME) {
-                //val viewModel = hiltViewModel<HomeViewModel>()
+                val viewModel = hiltViewModel<HomeViewModel>()
                 HomeScreen(
-                    //state = viewModel.state
+                    state = viewModel.state
                 )
             }
         }

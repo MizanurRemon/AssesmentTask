@@ -2,6 +2,7 @@ package com.technonext.feed_domain.di
 
 import com.technonext.feed_domain.repository.FeedRepository
 import com.technonext.feed_domain.use_case.DeleteProductsUseCase
+import com.technonext.feed_domain.use_case.GetFavoriteProductsCountUseCase
 import com.technonext.feed_domain.use_case.GetFavoritesProductsUseCase
 import com.technonext.feed_domain.use_case.GetProductsUseCase
 import com.technonext.feed_domain.use_case.ObserveLocalDataUseCase
@@ -24,7 +25,7 @@ class FeedDomainModule {
 
     @ViewModelScoped
     @Provides
-    fun provideDeleteProductsUseCase(feedRepository: FeedRepository): DeleteProductsUseCase{
+    fun provideDeleteProductsUseCase(feedRepository: FeedRepository): DeleteProductsUseCase {
         return DeleteProductsUseCase(feedRepository)
     }
 
@@ -40,10 +41,15 @@ class FeedDomainModule {
         return UpdateFavoriteUseCase(feedRepository)
     }
 
-    //GetFavoritesProductsUseCase
     @ViewModelScoped
     @Provides
     fun provideGetFavoritesProductsUseCase(feedRepository: FeedRepository): GetFavoritesProductsUseCase {
         return GetFavoritesProductsUseCase(feedRepository)
+    }
+
+    @ViewModelScoped
+    @Provides
+    fun provideGetFavoriteProductsCount(feedRepository: FeedRepository): GetFavoriteProductsCountUseCase {
+        return GetFavoriteProductsCountUseCase(feedRepository)
     }
 }
