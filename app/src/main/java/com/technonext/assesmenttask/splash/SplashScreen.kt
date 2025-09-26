@@ -31,7 +31,7 @@ fun SplashScreen(
 
             when (event) {
                 is UiEvent.Success -> {
-                    onHome()
+                    onLogin()
                 }
 
                 is UiEvent.ShowSnackbar -> {
