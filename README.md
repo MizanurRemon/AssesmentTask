@@ -4,8 +4,6 @@ An Android sample app built with **Kotlin** and **Jetpack Compose** that demonst
 
 > Repo structure shows modules like `app/`, `core/`, `features/`, and shared Gradle logic in `buildSrc/` (see repository tree).
 
----
-
 ## ✨ Features
 
 * **Feed list** with paging / "load more" and list item actions
@@ -17,7 +15,9 @@ An Android sample app built with **Kotlin** and **Jetpack Compose** that demonst
 
 > The sample API used during development: `https://dummyjson.com/products?limit=10`.
 
----
+## 🧱 Authentication
+USER_MAIL = "user@gmail.com"
+USER_PASSWORD = "rr123456"
 
 ## 🧱 Project structure
 
