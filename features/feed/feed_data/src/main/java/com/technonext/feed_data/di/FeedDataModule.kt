@@ -1,6 +1,10 @@
 package com.technonext.feed_data.di
 
+import com.technonext.common.util.CoroutineDispatcherProvider
+import com.technonext.database.dao.ProductsDao
+import com.technonext.feed_data.dataSource.local.FeedLocalDataSource
 import com.technonext.feed_data.dataSource.remote.FeedRemoteDataSource
+import com.technonext.feed_data.dataSourceImpl.local.FeedLocalDataSourceImpl
 import com.technonext.feed_data.dataSourceImpl.remote.FeedRemoteDataSourceImpl
 import com.technonext.feed_data.repository.FeedRepositoryImpl
 import com.technonext.feed_domain.repository.FeedRepository
@@ -28,12 +32,26 @@ class FeedDataModule {
     @Singleton
     @Provides
     fun providesFeedRepository(
+        feedLocalDataSource: FeedLocalDataSource,
         feedRemoteDataSource: FeedRemoteDataSource,
         networkHandler: NetworkHandler
     ): FeedRepository {
         return FeedRepositoryImpl(
             feedRemoteDataSource = feedRemoteDataSource,
-            networkHandler = networkHandler
+            networkHandler = networkHandler,
+            feedLocalDataSource = feedLocalDataSource
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideFeedLocalDataSource(
+        productsDao: ProductsDao,
+        coroutineDispatcherProvider: CoroutineDispatcherProvider
+    ): FeedLocalDataSource {
+        return FeedLocalDataSourceImpl(
+            productsDao = productsDao,
+            coroutineDispatcherProvider = coroutineDispatcherProvider
         )
     }
 }

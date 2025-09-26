@@ -6,7 +6,7 @@ import com.technonext.network.dto.ProductsDto
 
 class FeedRemoteDataSourceImpl(val publicApiService: PublicApiService) :
     FeedRemoteDataSource {
-    override suspend fun getProducts(limit: Int): ProductsDto {
-        return publicApiService.getProducts(limit)
+    override suspend fun getProducts(limit: Int, skip: Int): ProductsDto {
+        return publicApiService.getProducts(limit, skip)
     }
 }

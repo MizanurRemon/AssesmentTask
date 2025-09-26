@@ -92,26 +92,7 @@ fun LazyListState.OnBottomReached(
 }
 
 @Composable
-fun EndRow(message: String = "You’re all caught up 👏") {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 24.r()),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = message,
-            style = MaterialTheme.typography.bodyMedium.copy(
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-                textAlign = TextAlign.Center
-            )
-        )
-    }
-}
-
-@Composable
-fun LoadingRow(message: String = "Loading…") {
+fun LoadingRow() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -124,10 +105,6 @@ fun LoadingRow(message: String = "Loading…") {
                 .size(24.r())
                 .padding(end = 8.r()),
             strokeWidth = 2.r()
-        )
-        Text(
-            text = message,
-            style = MaterialTheme.typography.bodyMedium
         )
     }
 }

@@ -6,5 +6,5 @@ import retrofit2.http.Query
 
 interface PublicApiService {
     @GET("/products")
-    suspend fun getProducts(@Query("limit") limit: Int): ProductsDto
+    suspend fun getProducts(@Query("limit") limit: Int, @Query("skip") skip: Int): ProductsDto
 }

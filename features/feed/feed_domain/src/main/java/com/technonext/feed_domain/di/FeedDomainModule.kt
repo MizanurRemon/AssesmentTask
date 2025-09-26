@@ -1,7 +1,9 @@
 package com.technonext.feed_domain.di
 
 import com.technonext.feed_domain.repository.FeedRepository
+import com.technonext.feed_domain.use_case.DeleteProductsUseCase
 import com.technonext.feed_domain.use_case.GetProductsUseCase
+import com.technonext.feed_domain.use_case.ObserveLocalDataUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,5 +18,17 @@ class FeedDomainModule {
     @Provides
     fun provideGetProductsUseCase(feedRepository: FeedRepository): GetProductsUseCase {
         return GetProductsUseCase(feedRepository)
+    }
+
+    @ViewModelScoped
+    @Provides
+    fun provideDeleteProductsUseCase(feedRepository: FeedRepository): DeleteProductsUseCase{
+        return DeleteProductsUseCase(feedRepository)
+    }
+
+    @ViewModelScoped
+    @Provides
+    fun provideObserveLocalDataUseCase(feedRepository: FeedRepository): ObserveLocalDataUseCase {
+        return ObserveLocalDataUseCase(feedRepository)
     }
 }

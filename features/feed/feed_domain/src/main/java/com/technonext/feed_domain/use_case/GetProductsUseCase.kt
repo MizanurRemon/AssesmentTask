@@ -6,7 +6,7 @@ import com.technonext.network.model.CommonErrorModel
 import com.technonext.network.utils.ResultWrapper
 
 class GetProductsUseCase(private val feedRepository: FeedRepository) {
-    suspend operator fun invoke(limit: Int): ResultWrapper<List<ProductModel>, CommonErrorModel>{
-        return feedRepository.getProducts(limit)
+    suspend operator fun invoke(limit: Int, skip: Int): ResultWrapper<List<ProductModel>, CommonErrorModel>{
+        return feedRepository.getProducts(limit, skip)
     }
 }

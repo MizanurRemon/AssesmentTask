@@ -5,45 +5,50 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.technonext.feed_domain.use_case.DeleteProductsUseCase
 import com.technonext.feed_domain.use_case.GetProductsUseCase
+import com.technonext.feed_domain.use_case.ObserveLocalDataUseCase
 import com.technonext.network.utils.ResultWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @HiltViewModel
 class FeedViewModel @Inject constructor(
-    private val getProductsUseCase: GetProductsUseCase
+    private val getProductsUseCase: GetProductsUseCase,
+    private val deleteProductsUseCase: DeleteProductsUseCase,
+    private val getLocalDataUseCase: ObserveLocalDataUseCase
 ) : ViewModel() {
 
     companion object {
-        private const val PAGE_SIZE = 20
+        private const val PAGE_SIZE = 10
     }
 
 
     var state by mutableStateOf(FeedState())
         private set
 
-    /*init {
-        viewModelScope.launch {
-            state = state.copy(isLoading = true)
-          val result =   getProductsUseCase(limit = 10)
-            when(result){
-                is ResultWrapper.Success -> {
-                    state = state.copy(isLoading = false, productsList = result.data)
-                    Log.d("dataxx", "${result.data}")
-                }
+    init {
 
-                is ResultWrapper.Failure -> {
-                    state = state.copy(isLoading = false)
-                    Log.d("dataxx", "failed")
-                }
+        deleteProducts()
+        loadLocalData()
+    }
+
+    private fun loadLocalData() {
+        viewModelScope.launch {
+            getLocalDataUseCase().collectLatest { products ->
+                state = state.copy(productsList = products)
+
             }
         }
-    }*/
-    init {
-        loadNextPage()
+    }
+
+    private fun deleteProducts() {
+        viewModelScope.launch {
+            deleteProductsUseCase()
+        }
     }
 
     fun loadNextPage() {
@@ -52,13 +57,13 @@ class FeedViewModel @Inject constructor(
         viewModelScope.launch {
             state = state.copy(isLoading = true)
 
-            // offset = current loaded count
-            val offset = state.productsList.size
-            when (val res = getProductsUseCase(limit = PAGE_SIZE)) {
+
+            val skip = state.productsList.size
+            when (val res = getProductsUseCase(limit = PAGE_SIZE, skip = skip)) {
                 is ResultWrapper.Success -> {
                     val newItems = res.data
                     state = state.copy(
-                        productsList = state.productsList + newItems,
+                        //productsList = state.productsList + newItems,
                         isLoading = false,
                         endReached = newItems.size < PAGE_SIZE
                     )
@@ -74,9 +79,4 @@ class FeedViewModel @Inject constructor(
         }
     }
 
-    fun refresh() {
-        if (state.isLoading) return
-        state = FeedState()
-        loadNextPage()
-    }
 }

@@ -1,7 +1,8 @@
 package com.technonext.feed_data.repository
 
-import android.util.Log
+import com.technonext.feed_data.dataSource.local.FeedLocalDataSource
 import com.technonext.feed_data.dataSource.remote.FeedRemoteDataSource
+import com.technonext.feed_data.mapper.toEntity
 import com.technonext.feed_data.mapper.toResponse
 import com.technonext.feed_domain.model.ProductModel
 import com.technonext.feed_domain.repository.FeedRepository
@@ -10,20 +11,26 @@ import com.technonext.network.utils.ExceptionalMessage
 import com.technonext.network.utils.NetworkHandler
 import com.technonext.network.utils.ResultWrapper
 import com.technonext.network.utils.parseHttpException
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import retrofit2.HttpException
 
 class FeedRepositoryImpl(
+    private val feedLocalDataSource: FeedLocalDataSource,
     private val feedRemoteDataSource: FeedRemoteDataSource,
     private val networkHandler: NetworkHandler
 ) : FeedRepository {
-    override suspend fun getProducts(limit: Int): ResultWrapper<List<ProductModel>, CommonErrorModel> {
+    override suspend fun getProducts(limit: Int, skip: Int): ResultWrapper<List<ProductModel>, CommonErrorModel> {
         return if (networkHandler.isNetworkAvailable()) {
             try {
 
                 val productsDto =
-                    feedRemoteDataSource.getProducts(limit)
+                    feedRemoteDataSource.getProducts(limit, skip)
 
                 val response = productsDto.products.map { it.toResponse() }
+
+
+                feedLocalDataSource.saveProducts(response.map { it.toEntity() })
 
                 return ResultWrapper.Success(response)
             } catch (e: HttpException) {
@@ -41,4 +48,19 @@ class FeedRepositoryImpl(
             ResultWrapper.Failure(CommonErrorModel(message = ExceptionalMessage.INTERNET_NOT_AVAILABLE))
         }
     }
+
+    override suspend fun deleteProducts() {
+        if (networkHandler.isNetworkAvailable()){
+            feedLocalDataSource.deleteUsers()
+            feedLocalDataSource.resetPrimaryKey()
+        }
+    }
+
+    override fun getLocalProducts(): Flow<List<ProductModel>> {
+        return feedLocalDataSource
+            .getProducts()
+            .map { list -> list.map { it.toResponse() } }
+    }
+
+
 }

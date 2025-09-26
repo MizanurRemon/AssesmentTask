@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    id("kotlin-kapt")
     id("com.google.devtools.ksp")
 }
 
@@ -11,7 +10,10 @@ apply {
 
 android {
     namespace = "com.technonext.database"
+}
 
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
 }
 
 dependencies {

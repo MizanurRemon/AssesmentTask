@@ -127,8 +127,8 @@ val normalBodyTextStyle = TextStyle(
 val smallBodyTextStyle = TextStyle(
     fontFamily = fontRoboto,
     fontSize = 14.ssp(),
-    fontWeight = FontWeight.Normal,
     lineHeight = 24.ssp(),
+    fontWeight = FontWeight.W300
 )
 
 //styleName: Body regular;
@@ -142,7 +142,7 @@ val bodyRegularTextStyle = TextStyle(
 val bodyRegularSpanStyle = SpanStyle(
     fontFamily = fontRoboto,
     fontSize = 16.ssp(),
-    fontWeight = FontWeight.W300,
+    fontWeight = FontWeight.W300
 )
 
 val subHeading1TextStyle = TextStyle(
