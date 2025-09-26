@@ -16,19 +16,19 @@ fun Products.toResponse(): ProductModel {
 
 fun ProductModel.toEntity(): ProductEntity {
     return ProductEntity(
-        productID = id,
+        productId = id,
         title = title,
         description = description,
-        photoUrl = image,
+        image = image
     )
 }
 
-fun ProductEntity.toResponse(): ProductModel{
+fun ProductEntity.toResponse(): ProductModel {
     return ProductModel(
-        id = id,
-        title = title ?: "",
-        description = description ?: "",
-        image = photoUrl ?: "",
+        id = productId,
+        title = title,
+        description = description,
+        image = image,
         isFavorite = isFavorite
     )
 }

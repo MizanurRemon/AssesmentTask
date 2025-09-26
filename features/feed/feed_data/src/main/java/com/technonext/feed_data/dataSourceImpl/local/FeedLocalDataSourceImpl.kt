@@ -16,8 +16,8 @@ class FeedLocalDataSourceImpl(
             productsDao.insertProducts(products)
         }
 
-    override fun getProducts(): Flow<List<ProductEntity>> =
-        productsDao.getProducts()
+    override fun getProducts(searchKey: String): Flow<List<ProductEntity>> =
+        productsDao.getProducts(searchKey)
 
     override fun getFavoriteProducts(): Flow<List<ProductEntity>> =
         productsDao.getFavoriteProducts()
@@ -25,11 +25,7 @@ class FeedLocalDataSourceImpl(
     override fun getFavoriteProductsCount(): Flow<Int> = productsDao.getFavoriteCount()
 
     override suspend fun deleteUsers() = withContext(coroutineDispatcherProvider.io) {
-        productsDao.deleteUsers()
-    }
-
-    override suspend fun resetPrimaryKey() = withContext(coroutineDispatcherProvider.io) {
-        productsDao.resetPrimaryKey()
+        productsDao.deleteProducts()
     }
 
 

@@ -67,6 +67,7 @@ dependencies {
     implementation(project(Modules.COMMON))
     implementation(project(Modules.DATABASE))
     implementation(project(Modules.NETWORK))
+    implementation(project(Modules.DATASTORE))
 
     implementation(project(Modules.AUTH_PRESENTATION))
     implementation(project(Modules.AUTH_DOMAIN))

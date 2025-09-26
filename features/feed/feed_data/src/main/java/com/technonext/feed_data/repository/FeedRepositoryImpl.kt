@@ -55,13 +55,13 @@ class FeedRepositoryImpl(
     override suspend fun deleteProducts() {
         if (networkHandler.isNetworkAvailable()) {
             feedLocalDataSource.deleteUsers()
-            feedLocalDataSource.resetPrimaryKey()
+            //feedLocalDataSource.resetPrimaryKey()
         }
     }
 
-    override fun getLocalProducts(): Flow<List<ProductModel>> {
+    override fun getLocalProducts(searchKey: String): Flow<List<ProductModel>> {
         return feedLocalDataSource
-            .getProducts()
+            .getProducts(searchKey)
             .map { list -> list.map { it.toResponse() } }
     }
 

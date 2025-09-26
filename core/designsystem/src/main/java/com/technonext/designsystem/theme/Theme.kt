@@ -27,13 +27,22 @@ private val LightColorScheme = lightColorScheme(
     surfaceTint = ColorPrimaryDark
 )
 
+enum class ThemeMode {
+    SYSTEM, LIGHT, DARK
+}
+
 @Composable
 fun AssessmentTaskTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
+    themeMode: ThemeMode = ThemeMode.SYSTEM,
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
+    val darkTheme = when (themeMode) {
+        ThemeMode.SYSTEM -> isSystemInDarkTheme()
+        ThemeMode.LIGHT -> false
+        ThemeMode.DARK -> true
+    }
+
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
@@ -50,6 +59,7 @@ fun AssessmentTaskTheme(
         content = content
     )
 }
+
 
 val darkButtonTextStyle = TextStyle(
     fontFamily = fontRoboto,

@@ -15,6 +15,7 @@ android {
 dependencies {
     implementation(project(Modules.FEED_DOMAIN))
 
+    implementation(project(Modules.DATASTORE))
     implementation(project(Modules.DESIGN_SYSTEM))
     implementation(project(Modules.COMMON))
     implementation(project(Modules.NETWORK))

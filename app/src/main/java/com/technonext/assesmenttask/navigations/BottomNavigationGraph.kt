@@ -6,15 +6,20 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.technonext.assesmenttask.home.bottom_nav_screens.SettingsScreen
+import com.technonext.feed_presentation.settings.SettingsScreen
 import com.technonext.feed_presentation.favorite.FavoritesScreen
 import com.technonext.feed_presentation.feed.FeedScreen
 import com.technonext.designsystem.BottomNavRoute
+import com.technonext.designsystem.theme.ThemeMode
 import com.technonext.feed_presentation.favorite.FavoriteViewModel
 import com.technonext.feed_presentation.feed.FeedViewModel
+import com.technonext.feed_presentation.settings.SettingsViewModel
 
 @Composable
-fun BottomNavigationGraph(navController: NavHostController = rememberNavController()) {
+fun BottomNavigationGraph(
+    navController: NavHostController = rememberNavController(),
+    themeMode: ThemeMode
+) {
 
     NavHost(
         navController = navController,
@@ -39,7 +44,11 @@ fun BottomNavigationGraph(navController: NavHostController = rememberNavControll
         }
 
         composable(BottomNavRoute.SETTINGS) {
-            SettingsScreen()
+            val viewModel = hiltViewModel<SettingsViewModel>()
+            SettingsScreen(
+                onEvent = viewModel::onEvent,
+                themeMode = themeMode
+            )
         }
 
     }

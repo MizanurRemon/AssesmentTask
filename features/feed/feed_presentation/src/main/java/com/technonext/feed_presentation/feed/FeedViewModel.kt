@@ -11,10 +11,10 @@ import com.technonext.feed_domain.use_case.ObserveLocalDataUseCase
 import com.technonext.feed_domain.use_case.UpdateFavoriteUseCase
 import com.technonext.network.utils.ResultWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 
 @HiltViewModel
 class FeedViewModel @Inject constructor(
@@ -31,10 +31,15 @@ class FeedViewModel @Inject constructor(
     var state by mutableStateOf(FeedState())
         private set
 
+    private var localDataJob: Job? = null
+
     init {
         deleteProducts()
-        loadLocalData()
+        // load all products initially
+        loadLocalData("")
     }
+
+    private fun deleteProducts() { viewModelScope.launch { deleteProductsUseCase() } }
 
     fun onEvent(event: FeedEvent) {
         when (event) {
@@ -46,21 +51,31 @@ class FeedViewModel @Inject constructor(
                     )
                 }
             }
-        }
-    }
 
-    private fun loadLocalData() {
-        viewModelScope.launch {
-            getLocalDataUseCase().collectLatest { products ->
-                state = state.copy(productsList = products)
-
+            is FeedEvent.OnSearchEvent -> {
+                state = state.copy(
+                    searchKey = event.searchKey,
+                    // reset paging on new search
+                    endReached = false
+                )
+                loadLocalData(event.searchKey)
             }
         }
     }
 
-    private fun deleteProducts() {
+    private fun loadLocalData(searchKey: String) {
+        localDataJob?.cancel()
+        localDataJob = viewModelScope.launch {
+            getLocalDataUseCase(searchKey).collectLatest { products ->
+                state = state.copy(productsList = products)
+            }
+        }
+    }
+
+    fun refreshProducts() {
         viewModelScope.launch {
             deleteProductsUseCase()
+            loadNextPage() // reload first page
         }
     }
 
@@ -70,26 +85,24 @@ class FeedViewModel @Inject constructor(
         viewModelScope.launch {
             state = state.copy(isLoading = true)
 
-
             val skip = state.productsList.size
             when (val res = getProductsUseCase(limit = PAGE_SIZE, skip = skip)) {
                 is ResultWrapper.Success -> {
                     val newItems = res.data
                     state = state.copy(
-                        //productsList = state.productsList + newItems,
                         isLoading = false,
                         endReached = newItems.size < PAGE_SIZE
+                        // productsList comes automatically from local DB observer
                     )
                 }
 
                 is ResultWrapper.Failure -> {
                     state = state.copy(
                         isLoading = false,
-                        error = "Failed to load"
+                        error = "Failed to load products"
                     )
                 }
             }
         }
     }
-
 }

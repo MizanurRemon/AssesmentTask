@@ -13,8 +13,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -25,8 +27,11 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import com.technonext.designsystem.components.CommonTextField
 import com.technonext.designsystem.r
 import com.technonext.designsystem.theme.bodyBoldTextStyle
 import com.technonext.designsystem.theme.smallBodyTextStyle
@@ -36,6 +41,7 @@ import com.technonext.designsystem.utils.LoadingRow
 import com.technonext.designsystem.utils.OnBottomReached
 import com.technonext.feed_domain.model.ProductModel
 import com.technonext.designsystem.R as DesignSystemR
+import com.technonext.common.R as CommonR
 
 @Composable
 fun FeedScreen(state: FeedState, onEvent: (FeedEvent) -> Unit, loadNextPage: () -> Unit) {
@@ -50,11 +56,25 @@ fun FeedScreen(state: FeedState, onEvent: (FeedEvent) -> Unit, loadNextPage: () 
             .fillMaxSize()
             .padding(horizontal = 10.r())
             .background(color = MaterialTheme.colorScheme.background),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+
+        ) {
+        CommonTextField(
+            value = state.searchKey,
+            onValueChange = {
+                onEvent(FeedEvent.OnSearchEvent(it))
+            },
+            onTouched = {
+
+            },
+            placeholder = stringResource(CommonR.string.search),
+            isTouched = false,
+            isValid = false,
+            modifier = Modifier.padding(vertical = 10.r()),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+        )
+
         LazyColumn(state = listState, verticalArrangement = Arrangement.spacedBy(10.r())) {
-            itemsIndexed(state.productsList) { _, item ->
+            items(items = state.productsList, key = { item -> item.id }) { item ->
                 ProductRow(
                     item = item,
                     onClick = {

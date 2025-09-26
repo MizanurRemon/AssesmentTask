@@ -5,7 +5,7 @@ import com.technonext.feed_domain.repository.FeedRepository
 import kotlinx.coroutines.flow.Flow
 
 class ObserveLocalDataUseCase(private val feedRepository: FeedRepository) {
-    operator fun invoke(): Flow<List<ProductModel>> {
-        return feedRepository.getLocalProducts()
+    operator fun invoke(searchKey: String): Flow<List<ProductModel>> {
+        return feedRepository.getLocalProducts(searchKey)
     }
 }

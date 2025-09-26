@@ -13,15 +13,20 @@ interface ProductsDao {
     suspend fun insertProducts(products: List<ProductEntity>)
 
     @Query("DELETE  FROM product")
-    suspend fun deleteUsers()
+    suspend fun deleteProducts()
 
     // @Query("DELETE FROM sqlite_sequence WHERE name='product'")
-    @Query("DELETE FROM sqlite_sequence")
-    suspend fun resetPrimaryKey()
+    /*@Query("DELETE FROM sqlite_sequence")
+    suspend fun resetPrimaryKey()*/
 
 
-    @Query("SELECT * FROM product")
-    fun getProducts(): Flow<List<ProductEntity>>
+    @Query(
+        """
+        SELECT * FROM product WHERE (:searchKey = '' OR title LIKE '%' || :searchKey || '%' COLLATE NOCASE
+           OR description LIKE '%' || :searchKey || '%' COLLATE NOCASE)
+           """
+    )
+    fun getProducts(searchKey: String): Flow<List<ProductEntity>>
 
     @Query("SELECT * FROM product WHERE isFavorite = 1")
     fun getFavoriteProducts(): Flow<List<ProductEntity>>

@@ -26,10 +26,12 @@ import com.technonext.assesmenttask.splash.SplashViewModel
 import com.technonext.auth_presentation.forgot_password.ForgotPasswordScreen
 import com.technonext.auth_presentation.forgot_password.ForgotPasswordViewModel
 import com.technonext.common.navigation.Route
+import com.technonext.designsystem.theme.ThemeMode
 
 @Composable
 fun AppNavigation(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    themeMode: ThemeMode
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
     Scaffold(
@@ -113,7 +115,8 @@ fun AppNavigation(
             composable(route = Route.HOME) {
                 val viewModel = hiltViewModel<HomeViewModel>()
                 HomeScreen(
-                    state = viewModel.state
+                    state = viewModel.state,
+                    themeMode = themeMode
                 )
             }
         }

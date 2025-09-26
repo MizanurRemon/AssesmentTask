@@ -4,7 +4,7 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-09-26T05:29:55.435245Z">
+        <DropdownSelection timestamp="2025-09-26T19:38:46.781058Z">
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="LocalEmulator" identifier="path=/Users/remon/.android/avd/Pixel_8_Pro.avd" />
@@ -15,12 +15,12 @@
           <targets>
             <Target type="DEFAULT_BOOT">
               <handle>
-                <DeviceId pluginId="LocalEmulator" identifier="path=/Users/remon/.android/avd/Pixel_9.avd" />
+                <DeviceId pluginId="LocalEmulator" identifier="path=/Users/remon/.android/avd/Pixel_8_Pro.avd" />
               </handle>
             </Target>
             <Target type="DEFAULT_BOOT">
               <handle>
-                <DeviceId pluginId="LocalEmulator" identifier="path=/Users/remon/.android/avd/Pixel_8_Pro.avd" />
+                <DeviceId pluginId="LocalEmulator" identifier="path=/Users/remon/.android/avd/Pixel_9.avd" />
               </handle>
             </Target>
           </targets>

@@ -13,6 +13,9 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavDestination
@@ -24,11 +27,13 @@ import com.technonext.designsystem.BOTTOM_NAVIGATION_ITEM
 import com.technonext.designsystem.components.CustomNavigationItem
 import com.technonext.designsystem.components.TopAppBar
 import com.technonext.designsystem.r
+import com.technonext.designsystem.theme.ThemeMode
 import com.technonext.common.R as CommonR
 
 @Composable
 fun HomeScreen(
-    state: HomeState
+    state: HomeState,
+    themeMode: ThemeMode
 ) {
     val bottomNavController = rememberNavController()
     Scaffold(
@@ -82,7 +87,10 @@ fun HomeScreen(
                 .padding(innerPadding)
                 .padding(vertical = 8.r())
         ) {
-            BottomNavigationGraph(bottomNavController)
+            BottomNavigationGraph(
+                navController = bottomNavController,
+                themeMode = themeMode
+            )
         }
     }
 }
@@ -99,7 +107,9 @@ fun HomeScreen(
 )
 @Composable
 fun PreviewHomeScreen() {
+    var themeMode by rememberSaveable { mutableStateOf(ThemeMode.SYSTEM) }
     HomeScreen(
-        state = HomeState()
+        state = HomeState(),
+        themeMode = themeMode
     )
 }

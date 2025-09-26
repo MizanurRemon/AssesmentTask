@@ -13,5 +13,6 @@ android {
 }
 
 dependencies {
-
+    api(libs.datastore.preferences)
+    implementation(libs.gson)
 }

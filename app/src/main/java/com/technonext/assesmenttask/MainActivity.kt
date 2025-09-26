@@ -4,18 +4,18 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.technonext.assesmenttask.navigations.AppNavigation
 import com.technonext.designsystem.theme.AssessmentTaskTheme
+import com.technonext.designsystem.theme.ThemeMode
+import com.technonext.feed_presentation.settings.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -24,10 +24,17 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            AssessmentTaskTheme {
+            val settingsViewModel: MainActivityViewModel = hiltViewModel()
+
+            val themeMode by settingsViewModel.themeMode.collectAsState(initial = ThemeMode.SYSTEM)
+
+            //var themeMode by rememberSaveable { mutableStateOf(ThemeMode.SYSTEM) }
+
+            AssessmentTaskTheme(themeMode = themeMode) {
                 val navController: NavHostController = rememberNavController()
                 AppNavigation(
-                    navController = navController
+                    navController = navController,
+                    themeMode = themeMode
                 )
             }
         }
