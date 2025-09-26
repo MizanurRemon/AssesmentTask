@@ -129,13 +129,6 @@ fun ErrorRow(
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(bottom = 8.r())
             )
-
-            Button(
-                onClick = onRetry,
-                shape = RoundedCornerShape(8.r())
-            ) {
-                Text("Retry")
-            }
         }
     }
 }
