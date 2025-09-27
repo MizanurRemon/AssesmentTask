@@ -32,8 +32,8 @@ class LoginViewModel @Inject constructor() : ViewModel() {
                     state = state.copy(
                         isEmailTouched = true,
                         isPasswordTouched = true,
-                        isMailValid = !validateEmail(state.email),
-                        isPasswordValid = state.password.isEmpty()
+                        isMailValid = validateEmail(state.email),
+                        isPasswordValid = state.password.isNotEmpty()
                     )
                     if (state.isMailValid && state.isPasswordValid) {
                         if (state.email == USER_MAIL && state.password == USER_PASSWORD) {
