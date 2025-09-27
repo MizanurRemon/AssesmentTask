@@ -66,4 +66,15 @@ dependencies {
     implementation(libs.accompanist.systemui)
     implementation(libs.accompanist.pager)
     implementation(libs.glide)
+
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+
+    // Compose testing
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+
+    // For debug builds (to inspect semantics in tests)
+    debugImplementation(libs.androidx.ui.test.manifest)
 }

@@ -29,6 +29,12 @@ class LoginViewModel @Inject constructor() : ViewModel() {
         when (event) {
             is LoginEvent.OnSignIn -> {
                 viewModelScope.launch {
+                    state = state.copy(
+                        isEmailTouched = true,
+                        isPasswordTouched = true,
+                        isMailValid = !validateEmail(state.email),
+                        isPasswordValid = state.password.isEmpty()
+                    )
                     if (state.isMailValid && state.isPasswordValid) {
                         if (state.email == USER_MAIL && state.password == USER_PASSWORD) {
                             _uiEvent.emit(UiEvent.Success)

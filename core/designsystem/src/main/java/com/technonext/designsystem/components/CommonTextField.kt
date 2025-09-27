@@ -110,7 +110,7 @@ fun CommonTextField(
             textStyle = effectiveTextStyle,
             keyboardOptions = keyboardOptions,
             cursorBrush = SolidColor(effectiveCursor),
-            modifier = Modifier
+            modifier = modifier
                 .weight(1f)
                 .padding(vertical = 15.r()),
             decorationBox = { innerTextField ->
